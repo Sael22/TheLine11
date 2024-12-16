@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ledge
+  - Vault
+  - Deep Jump
+  - Slide
+  - Reach
+  - Pole
   layers:
   - Default
   - TransparentFX
@@ -13,9 +19,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Ledge
+  - Wall
+  - Player
   - 
   - 
   - 
