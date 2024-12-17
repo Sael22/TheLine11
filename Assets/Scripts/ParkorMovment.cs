@@ -25,15 +25,20 @@ public class ParkorMovment : MonoBehaviour
     private bool isGrounded;
     private bool isClimbing;
 
+    // Animator reference
+    private Animator animator;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         HandleMovement();
         HandleClimbing();
+        UpdateAnimator();
     }
 
     void HandleMovement()
@@ -69,6 +74,11 @@ public class ParkorMovment : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
         }
+
+        // Set movement-related parameters
+        animator.SetBool("isRunning", isRunning && (x != 0 || z != 0));
+        animator.SetBool("isWalking", !isRunning && (x != 0 || z != 0));
+        animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
     }
 
     void HandleClimbing()
@@ -84,6 +94,15 @@ public class ParkorMovment : MonoBehaviour
             Vector3 climbDirection = transform.up * verticalInput;
             controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
+
+        // Set climbing parameter
+        animator.SetBool("isClimbing", isClimbing);
+    }
+
+    void UpdateAnimator()
+    {
+        // Update jumping parameter
+        animator.SetBool("isJumping", !isGrounded && !isClimbing);
     }
 
     void OnDrawGizmos()

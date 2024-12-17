@@ -178,7 +178,7 @@ Transform:
   m_GameObject: {fileID: 247544143}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.584}
+  m_LocalPosition: {x: 0, y: -0.532, z: 0.584}
   m_LocalScale: {x: 2.5839, y: 2.5839, z: 2.5839}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 1189413991}
   - component: {fileID: 1189413990}
   - component: {fileID: 1189413995}
+  - component: {fileID: 1189413996}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -311,7 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e3f7e474b412a45be9ef3e4f95b39b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 6
+  runSpeed: 12
   jumpForce: 4
   gravity: -12
   climbSpeed: 5
@@ -366,7 +368,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7ae0eaf47b535fa40a9802d30b63bc86, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -405,7 +407,7 @@ Transform:
   m_GameObject: {fileID: 1189413989}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.49, z: 0}
+  m_LocalPosition: {x: 0, y: 2.1, z: 0}
   m_LocalScale: {x: 1, y: 2.7287, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -439,6 +441,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &1189413996
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189413989}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2d9e47464a13f1d4a89cf08887b55f2f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1245286848
 GameObject:
   m_ObjectHideFlags: 0
