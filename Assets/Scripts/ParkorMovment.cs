@@ -26,7 +26,7 @@ public class ParkorMovment : MonoBehaviour
     private bool isClimbing;
 
     // Animator reference
-    private Animator animator;
+    public Animator animator;
 
     void Start()
     {
