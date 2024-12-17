@@ -6,6 +6,7 @@ public class ParkorMovment : MonoBehaviour
 {
     // Movement variables
     public float moveSpeed = 10f;
+    public float runSpeed = 15f;
     public float jumpForce = 7f;
     public float gravity = -9.81f;
     public float climbSpeed = 5f;
@@ -49,8 +50,12 @@ public class ParkorMovment : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
+        // Check for running
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        float currentSpeed = isRunning ? runSpeed : moveSpeed;
+
         Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * moveSpeed * Time.deltaTime);
+        controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Jumping
         if (Input.GetButtonDown("Jump") && isGrounded && !isClimbing)
