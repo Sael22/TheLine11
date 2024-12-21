@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParkorMovment : MonoBehaviour
+public class ParentMovement : MonoBehaviour
 {
     // Movement variables
     public float moveSpeed = 10f;
@@ -25,14 +25,23 @@ public class ParkorMovment : MonoBehaviour
     private bool isGrounded;
     private bool isClimbing;
 
-    // Animator reference
+    // Animator reference for child
     public Animator animator;
 
-    void Start()
+   void Start()
+{
+    controller = GetComponent<CharacterController>();
+
+    // Find the Animator in the child object
+    animator = GetComponentInChildren<Animator>();
+
+    // Check if Animator is assigned
+    if (animator == null)
     {
-        controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        Debug.LogError("Animator component is missing! Make sure the child has an Animator component.");
     }
+}
+
 
     void Update()
     {
@@ -75,7 +84,7 @@ public class ParkorMovment : MonoBehaviour
             controller.Move(velocity * Time.deltaTime);
         }
 
-        // Set movement-related parameters
+        // Set movement-related parameters for animations
         animator.SetBool("isRunning", isRunning && (x != 0 || z != 0));
         animator.SetBool("isWalking", !isRunning && (x != 0 || z != 0));
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
@@ -95,15 +104,21 @@ public class ParkorMovment : MonoBehaviour
             controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
 
-        // Set climbing parameter
+        // Set climbing parameter for animations
         animator.SetBool("isClimbing", isClimbing);
     }
 
-    void UpdateAnimator()
-    {
-        // Update jumping parameter
-        animator.SetBool("isJumping", !isGrounded && !isClimbing);
-    }
+   void UpdateAnimator()
+{
+    // Check if the character is moving
+    bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0);
+
+    // Update animator parameters
+    animator.SetBool("isWalking", isWalking && isGrounded); // Walking only when grounded
+    animator.SetBool("isJumping", !isGrounded && !isClimbing); // Jumping if not grounded
+    animator.SetBool("isClimbing", isClimbing); // Climbing animation
+    animator.SetBool("isIdle", !isWalking && isGrounded); // Idle when not moving and grounded
+}
 
     void OnDrawGizmos()
     {
