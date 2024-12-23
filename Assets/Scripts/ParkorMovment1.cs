@@ -107,6 +107,7 @@ public class ParentMovement : MonoBehaviour
         animator.SetBool("isRunning", isRunning && z != 0); // Forward only
         animator.SetBool("isWalking", !isRunning && z != 0);
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
+        animator.SetBool("isAir", !isGrounded && !isClimbing); // Set isAir when in the air
     }
 
     void HandleClimbing()
@@ -137,6 +138,7 @@ public class ParentMovement : MonoBehaviour
         animator.SetBool("isJumping", !isGrounded && !isClimbing); // Jumping if not grounded
         animator.SetBool("isClimbing", isClimbing); // Climbing animation
         animator.SetBool("isIdle", !isWalking && isGrounded); // Idle when not moving and grounded
+        animator.SetBool("isAir", !isGrounded && !isClimbing); // Set isAir animation parameter
     }
 
     void OnDrawGizmos()
