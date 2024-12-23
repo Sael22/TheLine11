@@ -28,26 +28,37 @@ public class ParentMovement : MonoBehaviour
     // Animator reference for child
     public Animator animator;
 
-   void Start()
-{
-    controller = GetComponent<CharacterController>();
+    // Cursor lock variables
+    private bool cursorLocked = true;
 
-    // Find the Animator in the child object
-    animator = GetComponentInChildren<Animator>();
-
-    // Check if Animator is assigned
-    if (animator == null)
+    void Start()
     {
-        Debug.LogError("Animator component is missing! Make sure the child has an Animator component.");
-    }
-}
+        controller = GetComponent<CharacterController>();
 
+        // Find the Animator in the child object
+        animator = GetComponentInChildren<Animator>();
+
+        // Check if Animator is assigned
+        if (animator == null)
+        {
+            Debug.LogError("Animator component is missing! Make sure the child has an Animator component.");
+        }
+
+        // Lock cursor at the start
+        LockCursor();
+    }
 
     void Update()
     {
         HandleMovement();
         HandleClimbing();
         UpdateAnimator();
+
+        // Handle cursor lock toggle
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleCursorLock();
+        }
     }
 
     void HandleMovement()
@@ -61,14 +72,22 @@ public class ParentMovement : MonoBehaviour
         }
 
         // Get input
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxis("Horizontal"); // Rotation input (A/D keys)
+        float z = Input.GetAxis("Vertical");   // Forward/backward movement
 
         // Check for running
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float currentSpeed = isRunning ? runSpeed : moveSpeed;
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        // **Rotation for Horizontal Input (A/D)**
+        if (x != 0)
+        {
+            float rotationSpeed = 100f; // Adjust rotation speed if needed
+            transform.Rotate(Vector3.up, x * rotationSpeed * Time.deltaTime);
+        }
+
+        // Forward/backward movement (W/S keys)
+        Vector3 move = transform.forward * z; // Only move forward/backward
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Jumping
@@ -85,8 +104,8 @@ public class ParentMovement : MonoBehaviour
         }
 
         // Set movement-related parameters for animations
-        animator.SetBool("isRunning", isRunning && (x != 0 || z != 0));
-        animator.SetBool("isWalking", !isRunning && (x != 0 || z != 0));
+        animator.SetBool("isRunning", isRunning && z != 0); // Forward only
+        animator.SetBool("isWalking", !isRunning && z != 0);
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
     }
 
@@ -108,17 +127,17 @@ public class ParentMovement : MonoBehaviour
         animator.SetBool("isClimbing", isClimbing);
     }
 
-   void UpdateAnimator()
-{
-    // Check if the character is moving
-    bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0);
+    void UpdateAnimator()
+    {
+        // Check if the character is moving
+        bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0);
 
-    // Update animator parameters
-    animator.SetBool("isWalking", isWalking && isGrounded); // Walking only when grounded
-    animator.SetBool("isJumping", !isGrounded && !isClimbing); // Jumping if not grounded
-    animator.SetBool("isClimbing", isClimbing); // Climbing animation
-    animator.SetBool("isIdle", !isWalking && isGrounded); // Idle when not moving and grounded
-}
+        // Update animator parameters
+        animator.SetBool("isWalking", isWalking && isGrounded); // Walking only when grounded
+        animator.SetBool("isJumping", !isGrounded && !isClimbing); // Jumping if not grounded
+        animator.SetBool("isClimbing", isClimbing); // Climbing animation
+        animator.SetBool("isIdle", !isWalking && isGrounded); // Idle when not moving and grounded
+    }
 
     void OnDrawGizmos()
     {
@@ -133,6 +152,33 @@ public class ParentMovement : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(climbCheck.position, climbDistance);
+        }
+    }
+
+    // Cursor lock methods
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        cursorLocked = true;
+    }
+
+    void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        cursorLocked = false;
+    }
+
+    void ToggleCursorLock()
+    {
+        if (cursorLocked)
+        {
+            UnlockCursor();
+        }
+        else
+        {
+            LockCursor();
         }
     }
 }
