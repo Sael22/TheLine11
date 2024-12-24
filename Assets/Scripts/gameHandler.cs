@@ -38,18 +38,14 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            healthSystem.Damage(10);
-            Destroy(collision.gameObject); // حذف العدو
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Heal")
+        if (other.gameObject.tag == "Enemy")
+        {
+            healthSystem.Damage(10);
+            Destroy(other.gameObject); // حذف العدو
+        }
+        else if (other.gameObject.tag == "Heal")
         {
             healthSystem.Heal(10);
             Destroy(other.gameObject); // حذف عنصر الشفاء
