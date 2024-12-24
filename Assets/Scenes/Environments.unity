@@ -10755,7 +10755,7 @@ PrefabInstance:
     - target: {fileID: 5001932023911442913, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
       propertyPath: laserAudioSource
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 237730684}
     - target: {fileID: 5148498282896424367, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.928
