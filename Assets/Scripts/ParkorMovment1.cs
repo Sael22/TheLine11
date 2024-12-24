@@ -72,22 +72,15 @@ public class ParentMovement : MonoBehaviour
         }
 
         // Get input
-        float x = Input.GetAxis("Horizontal"); // Rotation input (A/D keys)
-        float z = Input.GetAxis("Vertical");   // Forward/backward movement
+        float x = Input.GetAxis("Horizontal"); // Left and right movement (A/D keys)
+        float z = Mathf.Clamp(Input.GetAxis("Vertical"), 0, 1); // Forward movement only (W key)
 
         // Check for running
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float currentSpeed = isRunning ? runSpeed : moveSpeed;
 
-        // **Rotation for Horizontal Input (A/D)**
-        if (x != 0)
-        {
-            float rotationSpeed = 100f; // Adjust rotation speed if needed
-            transform.Rotate(Vector3.up, x * rotationSpeed * Time.deltaTime);
-        }
-
-        // Forward/backward movement (W/S keys)
-        Vector3 move = transform.forward * z; // Only move forward/backward
+        // Move horizontally and forward only
+        Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Jumping
@@ -104,8 +97,8 @@ public class ParentMovement : MonoBehaviour
         }
 
         // Set movement-related parameters for animations
-        animator.SetBool("isRunning", isRunning && z != 0); // Forward only
-        animator.SetBool("isWalking", !isRunning && z != 0);
+        animator.SetBool("isRunning", isRunning && z > 0); // Forward only
+        animator.SetBool("isWalking", !isRunning && z > 0);
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
         animator.SetBool("isAir", !isGrounded && !isClimbing); // Set isAir when in the air
     }
@@ -131,7 +124,7 @@ public class ParentMovement : MonoBehaviour
     void UpdateAnimator()
     {
         // Check if the character is moving
-        bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0);
+        bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") > 0);
 
         // Update animator parameters
         animator.SetBool("isWalking", isWalking && isGrounded); // Walking only when grounded
