@@ -5,6 +5,9 @@ public class GameHandler : MonoBehaviour
 {
     public Slider healthSlider; // الشريط الصحي
     public Slider laserSlider;  // شريط الليزر
+    public GameObject laserPrefab; // نموذج الليزر
+    public Transform laserSpawnPoint; // نقطة إطلاق الليزر
+
     private HealthSystem healthSystem = new HealthSystem(100);
     private int laserCount = 0; // عداد الليزر
     private int maxLasers = 10; // الحد الأقصى لليزر
@@ -27,6 +30,12 @@ public class GameHandler : MonoBehaviour
 
         // تحديث شريط الليزر
         laserSlider.value = laserCount;
+
+        // إطلاق الليزر عند الضغط على زر F وبوجود ذخيرة
+        if (Input.GetKeyDown(KeyCode.F) && laserCount > 0)
+        {
+            ShootLaser();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -54,6 +63,20 @@ public class GameHandler : MonoBehaviour
                 Destroy(other.gameObject); // حذف عنصر الليزر
             }
         }
+    }
+
+    private void ShootLaser()
+    {
+        // إطلاق الليزر
+        GameObject laser = Instantiate(laserPrefab, laserSpawnPoint.position, laserSpawnPoint.rotation);
+        Rigidbody rb = laser.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = false;
+            rb.AddForce(laserSpawnPoint.forward * 500f); // إطلاق القوة
+        }
+        laserCount--; // تقليل عدد الليزر بعد الإطلاق
     }
 }
 

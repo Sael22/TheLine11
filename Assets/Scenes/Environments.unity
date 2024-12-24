@@ -697,6 +697,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 21d4a1d8e9e091943bfd0d67ba65c2ed, type: 3}
   m_PrefabInstance: {fileID: 541451611}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &161454386 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1434594282831981834, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+  m_PrefabInstance: {fileID: 2076592333}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &178701288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8764,6 +8769,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3273617358818487328, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273617358818487328, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 6491954276648852998, guid: a2a161382c6984449936382beec3f987, type: 3}
     - target: {fileID: 3486912687303785005, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -8773,6 +8786,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5001932023911442913, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+      propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 6491954276648852998, guid: a2a161382c6984449936382beec3f987, type: 3}
+    - target: {fileID: 5001932023911442913, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
       propertyPath: laserSlider
       value: 
       objectReference: {fileID: 2063817451}
@@ -8780,6 +8797,10 @@ PrefabInstance:
       propertyPath: healthSlider
       value: 
       objectReference: {fileID: 1591917264}
+    - target: {fileID: 5001932023911442913, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+      propertyPath: laserSpawnPoint
+      value: 
+      objectReference: {fileID: 161454386}
     - target: {fileID: 5909054407034395572, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00000031223226
@@ -8896,8 +8917,7 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.00000022692062
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5429977005031836351, guid: 92b06b39bcd0ec4478bb8e43a93c4ea5, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

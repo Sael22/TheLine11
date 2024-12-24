@@ -9997,7 +9997,6 @@ GameObject:
   - component: {fileID: 3486912687303785005}
   - component: {fileID: 8795934129382169478}
   - component: {fileID: 3537014181446991261}
-  - component: {fileID: 5429977005031836351}
   - component: {fileID: 5001932023911442913}
   m_Layer: 0
   m_Name: Player 1 1
@@ -10151,26 +10150,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   animator: {fileID: 689199521073055366}
---- !u!114 &5429977005031836351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6612472291835251369}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2efbbadaedf6a4aa1402097088e94d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerBody: {fileID: 3221085230501036036}
-  playerCamera: {fileID: 0}
-  mouseSensitivity: 100
-  rotationSpeed: 5
-  maxVerticalAngle: 200
-  minVerticalAngle: -30
-  cameraDistance: 5
-  cameraHeight: 2
 --- !u!114 &5001932023911442913
 MonoBehaviour:
   m_ObjectHideFlags: 0
