@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;  // For scene management
 
 public class ground_death : MonoBehaviour
 {
@@ -13,8 +14,12 @@ public class ground_death : MonoBehaviour
         // Check if the collided object has the specified tag
         if (other.CompareTag(targetTag))
         {
-            // Destroy the object with the specified tag
-            Destroy(other.gameObject);
+            // Unlock the cursor before loading the "LOSE" scene
+            Cursor.lockState = CursorLockMode.None; // Unlock the cursor
+            Cursor.visible = true; // Make the cursor visible
+
+            // Load the "LOSE" scene
+            SceneManager.LoadScene("LOS");
         }
     }
 }
