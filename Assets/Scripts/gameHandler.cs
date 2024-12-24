@@ -3,35 +3,33 @@ using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
-    public Slider healthSlider; // الشريط الصحي
-    public Slider laserSlider;  // شريط الليزر
-    public GameObject laserPrefab; // نموذج الليزر
-    public Transform laserSpawnPoint; // نقطة إطلاق الليزر
+    public Slider healthSlider;
+    public Slider laserSlider;
+    public GameObject laserPrefab;
+    public Transform laserSpawnPoint;
+
+    public AudioSource healAudioSource;
+    public AudioSource enemyAudioSource;
+    public AudioSource laserAudioSource;
 
     private HealthSystem healthSystem = new HealthSystem(100);
-    private int laserCount = 0; // عداد الليزر
-    private int maxLasers = 10; // الحد الأقصى لليزر
+    private int laserCount = 0;
+    private int maxLasers = 10;
 
     private void Start()
     {
-        // إعداد شريط الصحة
         healthSlider.maxValue = 1f;
         healthSlider.value = healthSystem.getHealthPercentage();
 
-        // إعداد شريط الليزر
         laserSlider.maxValue = maxLasers;
         laserSlider.value = laserCount;
     }
 
     private void Update()
     {
-        // تحديث شريط الصحة
         healthSlider.value = healthSystem.getHealthPercentage();
-
-        // تحديث شريط الليزر
         laserSlider.value = laserCount;
 
-        // إطلاق الليزر عند الضغط على زر F وبوجود ذخيرة
         if (Input.GetKeyDown(KeyCode.F) && laserCount > 0)
         {
             ShootLaser();
@@ -43,36 +41,37 @@ public class GameHandler : MonoBehaviour
         if (other.gameObject.tag == "Enemy")
         {
             healthSystem.Damage(10);
-            Destroy(other.gameObject); // حذف العدو
+            if (enemyAudioSource != null) enemyAudioSource.Play();
+            Destroy(other.gameObject);
         }
         else if (other.gameObject.tag == "Heal")
         {
             healthSystem.Heal(10);
-            Destroy(other.gameObject); // حذف عنصر الشفاء
+            if (healAudioSource != null) healAudioSource.Play();
+            Destroy(other.gameObject);
         }
         else if (other.gameObject.tag == "Laser")
         {
-            // زيادة عدد الليزر
             if (laserCount < maxLasers)
             {
                 laserCount++;
-                Destroy(other.gameObject); // حذف عنصر الليزر
+                if (laserAudioSource != null) laserAudioSource.Play();
+                Destroy(other.gameObject);
             }
         }
     }
 
     private void ShootLaser()
     {
-        // إطلاق الليزر
         GameObject laser = Instantiate(laserPrefab, laserSpawnPoint.position, laserSpawnPoint.rotation);
         Rigidbody rb = laser.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = false;
             rb.useGravity = false;
-            rb.AddForce(laserSpawnPoint.forward * 500f); // إطلاق القوة
+            rb.AddForce(laserSpawnPoint.forward * 500f);
         }
-        laserCount--; // تقليل عدد الليزر بعد الإطلاق
+        laserCount--;
     }
 }
 
