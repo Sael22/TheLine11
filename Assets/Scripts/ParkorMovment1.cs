@@ -24,6 +24,8 @@ public class ParentMovement : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
     private bool isClimbing;
+    private bool canJump = true; // Added cooldown for jump spamming
+    private float airTime = 0f; // Track time in the air
 
     // Animator reference for child
     public Animator animator;
@@ -69,24 +71,31 @@ public class ParentMovement : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+            canJump = true; // Reset jump cooldown when grounded
+            airTime = 0f; // Reset air time when grounded
+        }
+        else if (!isGrounded)
+        {
+            airTime += Time.deltaTime; // Increase air time if not grounded
         }
 
         // Get input
         float x = Input.GetAxis("Horizontal"); // Left and right movement (A/D keys)
-        float z = Mathf.Clamp(Input.GetAxis("Vertical"), 0, 1); // Forward movement only (W key)
+        float z = Input.GetAxis("Vertical"); // Forward and backward movement (W/S keys)
 
         // Check for running
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float currentSpeed = isRunning ? runSpeed : moveSpeed;
 
-        // Move horizontally and forward only
+        // Move horizontally and forward/backward
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Jumping
-        if (Input.GetButtonDown("Jump") && isGrounded && !isClimbing)
+        if (Input.GetButtonDown("Jump") && isGrounded && !isClimbing && canJump)
         {
             velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+            canJump = false; // Prevent spamming jump
         }
 
         // Apply gravity
@@ -97,10 +106,10 @@ public class ParentMovement : MonoBehaviour
         }
 
         // Set movement-related parameters for animations
-        animator.SetBool("isRunning", isRunning && z > 0); // Forward only
-        animator.SetBool("isWalking", !isRunning && z > 0);
+        animator.SetBool("isRunning", isRunning && z != 0);
+        animator.SetBool("isWalking", !isRunning && z != 0);
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
-        animator.SetBool("isAir", !isGrounded && !isClimbing); // Set isAir when in the air
+        animator.SetBool("isAir", airTime > 0.6f); // Set isAir if airborne for more than 1 second
     }
 
     void HandleClimbing()
@@ -124,14 +133,14 @@ public class ParentMovement : MonoBehaviour
     void UpdateAnimator()
     {
         // Check if the character is moving
-        bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") > 0);
+        bool isWalking = (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0);
 
         // Update animator parameters
         animator.SetBool("isWalking", isWalking && isGrounded); // Walking only when grounded
         animator.SetBool("isJumping", !isGrounded && !isClimbing); // Jumping if not grounded
         animator.SetBool("isClimbing", isClimbing); // Climbing animation
         animator.SetBool("isIdle", !isWalking && isGrounded); // Idle when not moving and grounded
-        animator.SetBool("isAir", !isGrounded && !isClimbing); // Set isAir animation parameter
+        animator.SetBool("isAir", airTime > 1f); // Set isAir animation parameter
     }
 
     void OnDrawGizmos()
