@@ -1,20 +1,15 @@
 using UnityEngine;
 
-public class cursorRot : MonoBehaviour
+public class CursorRot : MonoBehaviour
 {
-
-    public Transform playerBody; // Reference to the player's body
-    public Camera playerCamera; // Reference to the camera
+    public Transform playerBody; // Reference to the player body (parent of the camera)
     public float mouseSensitivity = 100f; // Mouse sensitivity
-    public float rotationSpeed = 5f; // Speed of rotation
+    public float rotationSpeed = 5f; // Speed of movement
 
     public float maxVerticalAngle = 80f; // Max vertical angle for camera pitch
     public float minVerticalAngle = -30f; // Min vertical angle for camera pitch
-    public float cameraDistance = 5f; // How far the camera is from the player
-    public float cameraHeight = 2f; // How high the camera is from the player
 
     private float xRotation = 0f; // Vertical camera rotation (pitch)
-    private float yRotation = 0f; // Horizontal player body rotation (yaw)
 
     void Start()
     {
@@ -35,25 +30,16 @@ public class cursorRot : MonoBehaviour
     void HandleCameraRotation()
     {
         // Get the mouse input for X and Y axis
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         // Adjust vertical rotation (camera pitch)
-        xRotation -= mouseY * mouseSensitivity * Time.deltaTime; // Vertical mouse movement
+        xRotation -= mouseY; // Vertical mouse movement
         xRotation = Mathf.Clamp(xRotation, minVerticalAngle, maxVerticalAngle); // Clamp vertical rotation
 
-        // Apply vertical rotation to the camera
-        playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-        // Adjust horizontal rotation (player body rotation)
-        yRotation += mouseX * mouseSensitivity * Time.deltaTime; // Horizontal mouse movement
-        playerBody.rotation = Quaternion.Euler(0f, yRotation, 0f); // Apply rotation to the player body
-
-        // Rotate camera around the player horizontally (Y-axis)
-        Vector3 cameraOffset = new Vector3(0f, cameraHeight, -cameraDistance); // Adjusted position with cameraHeight
-        Quaternion rotation = Quaternion.Euler(0f, yRotation, 0f); // Camera's horizontal rotation
-        playerCamera.transform.position = playerBody.position + rotation * cameraOffset;
-        playerCamera.transform.LookAt(playerBody.position); // Ensure the camera looks at the player
+        // Apply rotation to the camera (local pitch) and player body (yaw)
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f); // Camera pitch
+        playerBody.Rotate(Vector3.up * mouseX); // Player yaw
     }
 
     void MovePlayer()
@@ -63,11 +49,9 @@ public class cursorRot : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         // Calculate movement direction
-        Vector3 moveDirection = (transform.right * horizontal + transform.forward * vertical).normalized;
+        Vector3 moveDirection = (playerBody.right * horizontal + playerBody.forward * vertical).normalized;
 
         // Move the player
         playerBody.Translate(moveDirection * rotationSpeed * Time.deltaTime, Space.World);
     }
 }
-
-

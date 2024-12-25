@@ -83,9 +83,12 @@ public class ParentMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal"); // Left and right movement (A/D keys)
         float z = Input.GetAxis("Vertical"); // Forward and backward movement (W/S keys)
 
-        // Check for running
-        bool isRunning = Input.GetKey(KeyCode.LeftShift);
-        float currentSpeed = isRunning ? runSpeed : moveSpeed;
+        // Set movement speed - check if running (Shift key)
+        float currentSpeed = moveSpeed;
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) // Running input
+        {
+            currentSpeed = runSpeed; // Set running speed
+        }
 
         // Move horizontally and forward/backward
         Vector3 move = transform.right * x + transform.forward * z;
@@ -105,9 +108,8 @@ public class ParentMovement : MonoBehaviour
             controller.Move(velocity * Time.deltaTime);
         }
 
-        // Set movement-related parameters for animations
-        animator.SetBool("isRunning", isRunning && z != 0);
-        animator.SetBool("isWalking", !isRunning && z != 0);
+        // Set movement-related parameters for animations (you can choose to leave this part out)
+        animator.SetBool("isWalking", z != 0);
         animator.SetBool("isIdle", x == 0 && z == 0 && isGrounded);
         animator.SetBool("isAir", airTime > 0.6f); // Set isAir if airborne for more than 1 second
     }
